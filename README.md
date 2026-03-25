@@ -170,13 +170,13 @@ output/mlflow_screenshots/
 
 ##  Visualisation MLflow
 
-### Suivi des expériences
+###  Suivi des expériences
 
-![MLflow Runs](output/mlflow_1.png)
+![MLflow Runs](mlflow_runs.png)
 
 ###  Comparaison des modèles
 
-![MLflow Metrics](output/mlflow_2.png)
+![MLflow Metrics](mlflow_metrics.png)
 
 ### Performances (ordre de grandeur)
 
