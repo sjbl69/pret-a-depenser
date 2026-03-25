@@ -13,8 +13,6 @@ Il s’agit d’un problème de classification binaire :
 
 ## 📁 Structure du projet
 
-## 📁 Structure du projet
-
 ```bash
 credit_scoring_project/
 │
@@ -101,7 +99,6 @@ Plusieurs modèles de classification ont été testés afin de comparer leurs pe
 
 * Régression logistique (LogisticRegression)
 * Random Forest (RandomForestClassifier)
-* LightGBM (LGBMClassifier) *(si disponible)*
 
 ---
 
@@ -170,6 +167,16 @@ Plusieurs runs ont été réalisés afin de comparer les performances des diffé
 Les captures d’écran de MLflow sont disponibles dans :
 
 output/mlflow_screenshots/
+
+##  Visualisation MLflow
+
+### Suivi des expériences
+
+![MLflow Runs](output/mlflow_1.png)
+
+###  Comparaison des modèles
+
+![MLflow Metrics](output/mlflow_2.png)
 
 ### Performances (ordre de grandeur)
 
