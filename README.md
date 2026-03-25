@@ -170,12 +170,12 @@ output/mlflow_screenshots/
 
 ##  Visualisation MLflow
 
-###  Suivi des expériences
+###  Suivi des modèles
 
 <img width="1920" height="1080" alt="mlflow_runs png" src="https://github.com/user-attachments/assets/597a4ab6-b830-4df3-b1e7-337c9634d74f" />
 
 
-###  Comparaison des modèles
+###  Comparaison des expériences
 
 <img width="1920" height="1080" alt="mlflow_metrics png" src="https://github.com/user-attachments/assets/44550d82-1379-44e5-ab7d-ad9dbd76fe49" />
 
