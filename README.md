@@ -1,10 +1,10 @@
-#  Projet Prêt à Dépenser – Credit Scoring
+# Projet Prêt à Dépenser – Credit Scoring
 
-##  Objectif
+## Objectif
 
 L’objectif de ce projet est de prédire le risque de défaut de paiement d’un client à partir de ses données financières et personnelles.
 
-Il s’agit d’un problème de **classification binaire** :
+Il s’agit d’un problème de classification binaire :
 
 * 0 → Client fiable
 * 1 → Client en défaut de paiement
@@ -13,7 +13,6 @@ Il s’agit d’un problème de **classification binaire** :
 
 ## 📁 Structure du projet
 
-```bash
 credit_scoring_project/
 │
 ├── data/
@@ -33,28 +32,24 @@ credit_scoring_project/
 ├── main.py
 ├── requirements.txt
 └── README.md
-```
-
 
 ---
 
 ##  Lancer le projet
 
-```bash
 python main.py
-```
 
- Le point d’entrée principal du projet est **main.py** 
+Le point d’entrée principal du projet est main.py.
 
 ---
 
 ##  Pipeline du projet
 
-Le pipeline complet est orchestré dans `main.py` :
+Le pipeline complet est orchestré dans main.py :
 
-1. Préparation des données (`data_preparation.py`)
-2. Entraînement du modèle (`model_training.py`)
-3. Tracking des expériences avec MLflow (`mlflow_training.py`)
+1. Préparation des données (data_preparation.py)
+2. Entraînement des modèles (model_training.py)
+3. Tracking des expériences avec MLflow (mlflow_training.py)
 
 ---
 
@@ -62,10 +57,10 @@ Le pipeline complet est orchestré dans `main.py` :
 
 ### Gestion des valeurs manquantes
 
-* Suppression des colonnes avec plus de **70% de valeurs manquantes**
+* Suppression des colonnes avec plus de 70% de valeurs manquantes
   → ces variables contiennent trop peu d’information exploitable
 
-* Imputation par **médiane**
+* Imputation par médiane
   → robuste aux valeurs extrêmes (outliers), fréquentes dans les données financières
 
 ---
@@ -74,37 +69,47 @@ Le pipeline complet est orchestré dans `main.py` :
 
 Création de variables métier :
 
-* `CREDIT_INCOME_RATIO` → niveau d’endettement
-* `ANNUITY_INCOME_RATIO` → charge mensuelle
-* `CREDIT_ANNUITY_RATIO` → structure du prêt
+* CREDIT_INCOME_RATIO → niveau d’endettement
+* ANNUITY_INCOME_RATIO → charge mensuelle
+* CREDIT_ANNUITY_RATIO → structure du prêt
 
- Ces variables traduisent la capacité de remboursement du client.
+Ces variables traduisent la capacité de remboursement du client.
 
 ---
 
 ### Encodage
 
-* Utilisation de **One-Hot Encoding (`pd.get_dummies`)**
-  → permet de transformer les variables catégorielles en variables numériques
-  → évite d’introduire un ordre artificiel
+Utilisation de One-Hot Encoding (pd.get_dummies)
+→ transformation des variables catégorielles en variables numériques
+→ évite d’introduire un ordre artificiel
 
 ---
 
 ##  Modélisation
 
-### Modèle utilisé
+### Modèles utilisés
 
-* Régression logistique (`LogisticRegression`)
+Plusieurs modèles de classification ont été testés afin de comparer leurs performances :
 
-### Gestion du déséquilibre
-
-* `class_weight='balanced'` utilisé car le dataset est déséquilibré (~8% défaut)
+* Régression logistique (LogisticRegression)
+* Random Forest (RandomForestClassifier)
+* LightGBM (LGBMClassifier) *(si disponible)*
 
 ---
 
-##  Validation
+### Gestion du déséquilibre
 
-* Train / Test split (80 / 20)
+Le dataset est fortement déséquilibré (~8% de défaut).
+
+→ Utilisation de :
+
+class_weight = "balanced"
+
+---
+
+### Validation
+
+* Train / Test split (80 / 20) avec stratification
 * Validation croisée (cross-validation)
 
 ---
@@ -113,7 +118,10 @@ Création de variables métier :
 
 ### Technique
 
-* **AUC (ROC-AUC)** → adaptée aux datasets déséquilibrés
+* AUC (ROC-AUC)
+  → adaptée aux datasets déséquilibrés
+
+---
 
 ### Métier
 
@@ -122,11 +130,11 @@ Fonction de coût personnalisée :
 * Faux négatif (FN) = 10
 * Faux positif (FP) = 1
 
- L’objectif est de minimiser le coût pour la banque.
+L’objectif est de minimiser le coût pour la banque.
 
 ---
 
-##  Optimisation du seuil
+###  Optimisation du seuil
 
 Le seuil de décision est optimisé afin de minimiser le coût métier, car le seuil standard de 0.5 n’est pas toujours optimal.
 
@@ -145,7 +153,7 @@ MLflow est utilisé pour :
   * seuil optimal
 * sauvegarder les modèles
 
- Plusieurs runs ont été réalisés afin de comparer les performances.
+Plusieurs runs ont été réalisés afin de comparer les performances des différents modèles.
 
 ---
 
@@ -153,26 +161,20 @@ MLflow est utilisé pour :
 
 Les captures d’écran de MLflow sont disponibles dans :
 
-```bash
 output/mlflow_screenshots/
-```
 
----
-
-##  Résultats
+### Performances (ordre de grandeur)
 
 * AUC ≈ 0.74
 * CV AUC ≈ 0.74
-* Modèle baseline performant
 
+Les modèles ont été comparés en utilisant à la fois des métriques techniques et un score métier, permettant de sélectionner le modèle le plus pertinent pour le contexte bancaire.
 
 ---
-
-
 
 ##  Auteur
 
 Selma — Ingénieure en Intelligence Artificielle
+
 Projet réalisé dans le cadre de la formation OpenClassrooms
 
----
