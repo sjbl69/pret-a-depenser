@@ -18,17 +18,15 @@ except:
     USE_LGBM = False
 
 
-# ===============================
 # METRIQUE METIER
-# ===============================
+
 def business_score(y_true, y_pred):
     tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
     return 10 * fn + 1 * fp
 
 
-# ===============================
 # SEUIL OPTIMAL
-# ===============================
+
 def find_best_threshold(y_true, y_proba):
     best_threshold = 0.5
     best_cost = float("inf")
@@ -44,22 +42,19 @@ def find_best_threshold(y_true, y_proba):
     return best_threshold, best_cost
 
 
-# ===============================
 # TRAIN AVEC MLFLOW
-# ===============================
+
 def train_with_mlflow(application):
 
     print("Training with MLflow...")
 
-    # ===================
     # FEATURES / TARGET
-    # ===================
+
     X = application.drop(columns=['TARGET'])
     y = application['TARGET']
 
-    # ===================
     # SPLIT
-    # ===================
+
     X_train, X_test, y_train, y_test = train_test_split(
         X, y,
         test_size=0.2,
@@ -67,21 +62,18 @@ def train_with_mlflow(application):
         stratify=y
     )
 
-    # ===================
     # SCALING
-    # ===================
+
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
-    # ===================
     # EXPERIMENT
-    # ===================
+
     mlflow.set_experiment("credit_scoring")
 
-    # ===================
     # MODELES A TESTER
-    # ===================
+
     models = {
         "LogisticRegression": LogisticRegression(
             max_iter=5000,
@@ -101,18 +93,16 @@ def train_with_mlflow(application):
             random_state=42
         )
 
-    # ===================
     # LOOP MODELES
-    # ===================
+
     for name, model in models.items():
 
         print(f"\nTraining {name}...")
 
         with mlflow.start_run(run_name=name):
 
-            # ===================
             # CROSS VALIDATION
-            # ===================
+
             cv_scores = cross_val_score(
                 model,
                 X_train,
@@ -124,33 +114,27 @@ def train_with_mlflow(application):
             cv_auc = cv_scores.mean()
             print(f"CV AUC: {cv_auc:.4f}")
 
-            # ===================
             # TRAIN
-            # ===================
+
             model.fit(X_train, y_train)
 
-            # ===================
             # PREDICTIONS
-            # ===================
+
             y_proba = model.predict_proba(X_test)[:, 1]
 
-            # ===================
             # AUC
-            # ===================
+
             auc = roc_auc_score(y_test, y_proba)
             print(f"AUC: {auc:.4f}")
 
-            # ===================
             # METRIQUE METIER
-            # ===================
+
             best_threshold, best_cost = find_best_threshold(y_test, y_proba)
 
             print(f"Best threshold: {best_threshold}")
             print(f"Business cost: {best_cost}")
 
-            # ===================
             # LOGGING MLFLOW
-            # ===================
 
             # PARAMS
             mlflow.log_param("model", name)
@@ -164,6 +148,6 @@ def train_with_mlflow(application):
             # MODELE
             mlflow.sklearn.log_model(model, "model")
 
-            print(f"{name} logged in MLflow ✅")
+            print(f"{name} logged in MLflow ")
 
     print("\nAll models trained and logged!")

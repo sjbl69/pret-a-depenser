@@ -1,9 +1,8 @@
 import pandas as pd
 
 
-# ===============================
 # LOAD DATA
-# ===============================
+
 def load_data():
     print("Chargement des données...")
 
@@ -14,9 +13,8 @@ def load_data():
     return df
 
 
-# ===============================
 # CLEAN DATA
-# ===============================
+
 def clean_data(df):
 
     print("Nettoyage des données...")
@@ -37,9 +35,7 @@ def clean_data(df):
     return df
 
 
-# ===============================
 # FEATURE ENGINEERING
-# ===============================
 
 # Feature engineering
 # Ces variables représentent la capacité de remboursement du client
@@ -55,9 +51,7 @@ def feature_engineering(df):
     return df
 
 
-# ===============================
 # ENCODING
-# ===============================
 
 # Encodage des variables catégorielles
 # Justification : les modèles ML nécessitent des données numériques
@@ -71,9 +65,8 @@ def encode_data(df):
     return df
 
 
-# ===============================
 # MAIN FUNCTION
-# ===============================
+
 def prepare_dataset():
 
     df = load_data()
@@ -82,7 +75,7 @@ def prepare_dataset():
 
     df = feature_engineering(df)
 
-    df = encode_data(df)  # 🔥 IMPORTANT
+    df = encode_data(df)  #  IMPORTANT
 
     print("Dataset prêt !")
 
