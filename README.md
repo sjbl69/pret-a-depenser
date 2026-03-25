@@ -178,7 +178,8 @@ output/mlflow_screenshots/
 
 ![MLflow Metrics](mlflow_metrics.png)
 
-### Performances (ordre de grandeur)
+### Performances (ordre de grandeur)<img width="1920" height="1080" alt="mlflow_metrics png" src="https://github.com/user-attachments/assets/44550d82-1379-44e5-ab7d-ad9dbd76fe49" />
+
 
 * AUC ≈ 0.74
 * CV AUC ≈ 0.74
