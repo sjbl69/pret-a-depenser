@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-# LOAD DATA
+# CHARGEMENT DES DONNEES
 
 def load_data():
     print("Chargement des données...")
@@ -13,7 +13,7 @@ def load_data():
     return df
 
 
-# CLEAN DATA
+# NETTOYAGE DES DONNEES
 
 def clean_data(df):
 
@@ -26,6 +26,10 @@ def clean_data(df):
     cols_to_drop = missing_ratio[missing_ratio > 0.7].index
 
     df = df.drop(columns=cols_to_drop)
+
+# VERIFIER LES DOUBLONS 
+
+    df = df.drop_duplicates()
 
 # Imputation par la médiane
 # Justification : méthode robuste aux valeurs extrêmes (outliers)
