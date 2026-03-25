@@ -13,6 +13,9 @@ Il s’agit d’un problème de classification binaire :
 
 ## 📁 Structure du projet
 
+## 📁 Structure du projet
+
+```bash
 credit_scoring_project/
 │
 ├── data/
@@ -20,9 +23,12 @@ credit_scoring_project/
 │   ├── bureau.csv
 │   └── previous_application.csv
 │
+├── mlruns/
+│
 ├── output/
-│   ├── figures/
-│   └── mlflow_screenshots/
+│   ├── mlflow_screenshots/
+│   ├── cost_vs_threshold.png
+│   └── dataset_final.csv
 │
 ├── src/
 │   ├── data_preparation.py
@@ -30,8 +36,10 @@ credit_scoring_project/
 │   └── mlflow_training.py
 │
 ├── main.py
+├── mlflow.db
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
