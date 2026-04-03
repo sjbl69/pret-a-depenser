@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+.venv/
+
+# Data
+data/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Outputs
+output/model.pkl
+output/dataset_final.csv

@@ -1,0 +1,52 @@
+# ======================
+# Python
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ======================
+# Environnement virtuel
+# ======================
+.venv/
+venv/
+env/
+
+# ======================
+# Données & ML
+# ======================
+data/
+mlruns/
+
+# Output : on ignore tout sauf le modèle
+credit_scoring_project/output/*
+!credit_scoring_project/output/model.pkl
+
+# ======================
+# Logs
+# ======================
+*.log
+
+# ======================
+# OS
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# IDE
+# ======================
+.vscode/
+.idea/
+
+# ======================
+# Git
+# ======================
+.git/
+
+# ======================
+# Docker
+# ======================
+*.tar
+
+credit_scoring_project/output/dataset_final.csv

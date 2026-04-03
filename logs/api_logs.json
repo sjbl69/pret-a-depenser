@@ -1,0 +1,9 @@
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "error": "'NoneType' object has no attribute 'transform'", "execution_time": 0.02868199348449707, "status": "error"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "error": "'NoneType' object has no attribute 'transform'", "execution_time": 0.0020704269409179688, "status": "error"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "error": "'NoneType' object has no attribute 'transform'", "execution_time": 0.0026814937591552734, "status": "error"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "error": "Mod\u00e8le non charg\u00e9", "execution_time": 6.67572021484375e-06, "status": "error"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "error": "Mod\u00e8le non charg\u00e9", "execution_time": 5.0067901611328125e-06, "status": "error"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "error": "Mod\u00e8le non charg\u00e9", "execution_time": 5.4836273193359375e-06, "status": "error"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "error": "Mod\u00e8le non charg\u00e9", "execution_time": 1.7642974853515625e-05, "status": "error"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "prediction": 0, "probability": 6.351648037342248e-06, "execution_time": 0.07372474670410156, "status": "success"}
+{"inputs": {"AMT_INCOME_TOTAL": 50000, "AMT_CREDIT": 100000, "DAYS_BIRTH": -12000}, "prediction": 0, "probability": 6.351648037342248e-06, "execution_time": 0.005643367767333984, "status": "success"}
