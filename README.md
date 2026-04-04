@@ -228,6 +228,26 @@ Exemple d’une entrée de log :
 
 ![Uploading Capture d'écran 2026-04-04 161912.png…]()
 
+---
+
+##  Script d’analyse des logs et data drift
+
+Le script permettant d’analyser les logs et de détecter les dérives des données est disponible ici :
+
+analysis/analyze_logs.py
+
+Ce script permet de :
+
+- calculer le taux d’erreur
+- analyser les temps de réponse
+- extraire les données de production
+- détecter la dérive des données (data drift)
+
+###  Lancer l’analyse
+
+```bash
+python analysis/analyze_logs.py
+
 ##  Auteur
 
 Selma — Ingénieure en Intelligence Artificielle
