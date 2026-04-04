@@ -226,6 +226,7 @@ Exemple d’une entrée de log :
   "status": "success"
 }
 
+![Uploading Capture d'écran 2026-04-04 161912.png…]()
 
 ##  Auteur
 
