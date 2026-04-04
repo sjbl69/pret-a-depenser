@@ -226,6 +226,7 @@ Exemple d’une entrée de log :
   "status": "success"
 }
 
+
 ##  Auteur
 
 Selma — Ingénieure en Intelligence Artificielle
