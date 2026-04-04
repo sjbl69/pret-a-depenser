@@ -188,6 +188,44 @@ Les modèles ont été comparés en utilisant à la fois des métriques techniqu
 
 ---
 
+
+##  Monitoring et stockage des données de production
+
+Dans le cadre du déploiement du modèle, une solution de monitoring a été mise en place afin de suivre le comportement de l’API en production.
+
+Les données générées par l’API sont stockées sous forme de logs structurés en JSON dans le fichier :
+
+logs/api_logs.json
+
+Chaque requête enregistrée contient :
+
+- les données d’entrée (inputs)
+- la prédiction du modèle
+- la probabilité associée
+- le temps d’exécution
+- le statut de la requête (succès ou erreur)
+
+Cette approche permet de conserver un historique des prédictions et d’analyser le comportement du modèle en production.
+
+---
+
+##  Exemple de logs
+
+Exemple d’une entrée de log :
+
+```json
+{
+  "inputs": {
+    "AMT_INCOME_TOTAL": 50000,
+    "AMT_CREDIT": 100000,
+    "DAYS_BIRTH": -12000
+  },
+  "prediction": 0,
+  "probability": 0.23,
+  "execution_time": 0.04,
+  "status": "success"
+}
+
 ##  Auteur
 
 Selma — Ingénieure en Intelligence Artificielle
