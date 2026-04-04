@@ -1,15 +1,22 @@
-from fastapi import FastAPI, HTTPException
-from credit_scoring_project.api.model_loader import load_model
+from fastapi import FastAPI, HTTPException, Request
 import pandas as pd
-
-import logging
-import json
 import time
+import json
+import logging
 import os
 
+from credit_scoring_project.api.model_loader import load_model
 
-# 1. Configuration logging
 
+# ==============================
+# 1. Initialisation API (IMPORTANT)
+# ==============================
+app = FastAPI()
+
+
+# ==============================
+# 2. Logging
+# ==============================
 os.makedirs("logs", exist_ok=True)
 
 logging.basicConfig(
@@ -21,66 +28,81 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 
-#  2. Initialisation API
-
-app = FastAPI()
-
-
+# ==============================
 # 3. Chargement modèle
-
+# ==============================
 bundle = load_model()
 
 model = bundle.get("model")
-scaler = bundle.get("scaler")  
+scaler = bundle.get("scaler")
 threshold = bundle.get("threshold", 0.5)
 columns = bundle.get("columns")
 
 
+# ==============================
 # 4. Route test
-
+# ==============================
 @app.get("/")
 def home():
     return {"message": "API Credit Scoring active"}
 
 
-# 5. Route prédiction avec logging
-
+# ==============================
+# 5. Route prédiction (VALIDATION + LOGGING)
+# ==============================
 @app.post("/predict")
-def predict(data: dict):
+async def predict(request: Request):
     start_time = time.time()
 
     try:
-        # Vérification sécurité
-        if model is None:
-            raise ValueError("Modèle non chargé")
+        # 🔥 récupérer données brutes
+        data = await request.json()
 
-        if columns is None:
-            raise ValueError("Colonnes non définies")
+        # =========================
+        # VALIDATION (POUR TESTS)
+        # =========================
+        required_fields = ["AMT_INCOME_TOTAL", "AMT_CREDIT", "DAYS_BIRTH"]
 
-        # créer dataframe vide
+        # champs manquants
+        if not all(field in data for field in required_fields):
+            raise HTTPException(status_code=400, detail="Missing required fields")
+
+        # mauvais type
+        for field in required_fields:
+            if not isinstance(data[field], (int, float)):
+                raise HTTPException(status_code=400, detail=f"Invalid type for {field}")
+
+        data_dict = data
+
+        # =========================
+        # PREPROCESSING
+        # =========================
         df = pd.DataFrame([0] * len(columns)).T
         df.columns = columns
 
-        # injecter inputs utilisateur
-        for key, value in data.items():
+        for key, value in data_dict.items():
             if key in df.columns:
                 df[key] = value
 
-        # appliquer scaler si présent
+        # scaler
         if scaler is not None:
             df_scaled = scaler.transform(df.values)
         else:
             df_scaled = df.values
 
-        # prédiction
+        # =========================
+        # PREDICTION
+        # =========================
         proba = model.predict_proba(df_scaled)[0][1]
         prediction = int(proba >= threshold)
 
         execution_time = time.time() - start_time
 
-        # log succès
+        # =========================
+        # LOG SUCCESS
+        # =========================
         log = {
-            "inputs": data,
+            "inputs": data_dict,
             "prediction": prediction,
             "probability": float(proba),
             "execution_time": execution_time,
@@ -94,12 +116,14 @@ def predict(data: dict):
             "probability": float(proba)
         }
 
+    except HTTPException:
+        raise
+
     except Exception as e:
         execution_time = time.time() - start_time
 
-        # log erreur
         log = {
-            "inputs": data,
+            "inputs": data if 'data' in locals() else {},
             "error": str(e),
             "execution_time": execution_time,
             "status": "error"
