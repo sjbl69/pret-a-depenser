@@ -33,6 +33,12 @@ credit_scoring_project/
 │   ├── model_training.py
 │   └── mlflow_training.py
 │
+├── analysis/
+│   └── analyze_logs.py
+│
+├── docs/
+│   └── performance_optimiziation.md
+│
 ├── main.py
 ├── mlflow.db
 ├── requirements.txt
@@ -41,33 +47,32 @@ credit_scoring_project/
 
 ---
 
-##  Lancer le projet
+## Lancer le projet
 
+```bash
 python main.py
+```
 
-Le point d’entrée principal du projet est main.py.
-
----
-
-##  Pipeline du projet
-
-Le pipeline complet est orchestré dans main.py :
-
-1. Préparation des données (data_preparation.py)
-2. Entraînement des modèles (model_training.py)
-3. Tracking des expériences avec MLflow (mlflow_training.py)
+Le point d’entrée principal du projet est `main.py`.
 
 ---
 
-##  Préparation des données
+## Pipeline du projet
+
+Le pipeline complet est orchestré dans `main.py` :
+
+1. Préparation des données (`data_preparation.py`)
+2. Entraînement des modèles (`model_training.py`)
+3. Tracking des expériences avec MLflow (`mlflow_training.py`)
+
+---
+
+## Préparation des données
 
 ### Gestion des valeurs manquantes
 
-* Suppression des colonnes avec plus de 70% de valeurs manquantes
-  → ces variables contiennent trop peu d’information exploitable
-
-* Imputation par médiane
-  → robuste aux valeurs extrêmes (outliers), fréquentes dans les données financières
+* Suppression des colonnes avec plus de 70% de valeurs manquantes  
+* Imputation par médiane  
 
 ---
 
@@ -75,143 +80,101 @@ Le pipeline complet est orchestré dans main.py :
 
 Création de variables métier :
 
-* CREDIT_INCOME_RATIO → niveau d’endettement
-* ANNUITY_INCOME_RATIO → charge mensuelle
-* CREDIT_ANNUITY_RATIO → structure du prêt
-
-Ces variables traduisent la capacité de remboursement du client.
+* CREDIT_INCOME_RATIO  
+* ANNUITY_INCOME_RATIO  
+* CREDIT_ANNUITY_RATIO  
 
 ---
 
 ### Encodage
 
-Utilisation de One-Hot Encoding (pd.get_dummies)
-→ transformation des variables catégorielles en variables numériques
-→ évite d’introduire un ordre artificiel
+Utilisation de One-Hot Encoding (`pd.get_dummies`)
 
 ---
 
-##  Modélisation
+## Modélisation
 
 ### Modèles utilisés
 
-Plusieurs modèles de classification ont été testés afin de comparer leurs performances :
-
-* Régression logistique (LogisticRegression)
-* Random Forest (RandomForestClassifier)
+* Logistic Regression  
+* Random Forest  
 
 ---
 
 ### Gestion du déséquilibre
 
-Le dataset est fortement déséquilibré (~8% de défaut).
-
-→ Utilisation de :
-
+```python
 class_weight = "balanced"
+```
 
 ---
 
 ### Validation
 
-* Train / Test split (80 / 20) avec stratification
-* Validation croisée (cross-validation)
+* Train / Test split (80 / 20)
+* Cross-validation
 
 ---
 
-##  Métriques
+## Métriques
 
 ### Technique
 
 * AUC (ROC-AUC)
-  → adaptée aux datasets déséquilibrés
-
----
 
 ### Métier
 
-Fonction de coût personnalisée :
-
-* Faux négatif (FN) = 10
-* Faux positif (FP) = 1
-
-L’objectif est de minimiser le coût pour la banque.
+* FN = 10  
+* FP = 1  
 
 ---
 
-###  Optimisation du seuil
+## Optimisation du seuil
 
-Le seuil de décision est optimisé afin de minimiser le coût métier, car le seuil standard de 0.5 n’est pas toujours optimal.
+Le seuil de décision est optimisé afin de minimiser le coût métier.
 
 ---
 
-##  MLflow
+## MLflow
 
-MLflow est utilisé pour :
+MLflow permet de :
 
 * tracker les expériences
-* enregistrer les métriques :
-
-  * AUC
-  * CV_AUC
-  * coût métier
-  * seuil optimal
+* enregistrer les métriques
 * sauvegarder les modèles
-
-Plusieurs runs ont été réalisés afin de comparer les performances des différents modèles.
 
 ---
 
-##  Résultats
+## Résultats
 
-Les captures d’écran de MLflow sont disponibles dans :
+Captures disponibles dans :
 
 output/mlflow_screenshots/
 
-##  Visualisation MLflow
+### Performances
 
-###  Suivi des modèles
-
-<img width="1920" height="1080" alt="mlflow_runs png" src="https://github.com/user-attachments/assets/597a4ab6-b830-4df3-b1e7-337c9634d74f" />
-
-
-###  Comparaison des expériences
-
-<img width="1920" height="1080" alt="mlflow_metrics png" src="https://github.com/user-attachments/assets/44550d82-1379-44e5-ab7d-ad9dbd76fe49" />
-
-### Performances (ordre de grandeur)
-
-* AUC ≈ 0.74
-* CV AUC ≈ 0.74
-
-Les modèles ont été comparés en utilisant à la fois des métriques techniques et un score métier, permettant de sélectionner le modèle le plus pertinent pour le contexte bancaire.
+* AUC ≈ 0.74  
+* CV AUC ≈ 0.74  
 
 ---
 
+## Monitoring et stockage des données de production
 
-##  Monitoring et stockage des données de production
-
-Dans le cadre du déploiement du modèle, une solution de monitoring a été mise en place afin de suivre le comportement de l’API en production.
-
-Les données générées par l’API sont stockées sous forme de logs structurés en JSON dans le fichier :
+Les logs sont stockés en JSON dans :
 
 logs/api_logs.json
 
-Chaque requête enregistrée contient :
+Chaque requête contient :
 
-- les données d’entrée (inputs)
-- la prédiction du modèle
-- la probabilité associée
-- le temps d’exécution
-- le statut de la requête (succès ou erreur)
-
-Cette approche permet de conserver un historique des prédictions et d’analyser le comportement du modèle en production.
+- inputs
+- prediction
+- probability
+- execution_time
+- status
 
 ---
 
-##  Exemple de logs
-
-Exemple d’une entrée de log :
+## Exemple de logs
 
 ```json
 {
@@ -225,32 +188,52 @@ Exemple d’une entrée de log :
   "execution_time": 0.04,
   "status": "success"
 }
-
-![Uploading Capture d'écran 2026-04-04 161912.png…]()
+```
 
 ---
 
-##  Script d’analyse des logs et data drift
+## Script d’analyse des logs et data drift
 
-Le script permettant d’analyser les logs et de détecter les dérives des données est disponible ici :
+Le script est disponible ici :
 
 analysis/analyze_logs.py
 
-Ce script permet de :
+Il permet de :
 
 - calculer le taux d’erreur
 - analyser les temps de réponse
-- extraire les données de production
-- détecter la dérive des données (data drift)
+- détecter le data drift
 
-###  Lancer l’analyse
+### Lancer l’analyse
 
 ```bash
 python analysis/analyze_logs.py
+```
 
-##  Auteur
+---
 
-Selma — Ingénieure en Intelligence Artificielle
+## Optimisation des performances
+
+Un rapport détaillé est disponible ici :
+
+docs/performance_optimiziation.md
+
+---
+
+## Tests API
+
+Les tests vérifient :
+
+- cas valide → 200  
+- cas invalide → 400  
+- données manquantes → 400  
+
+Cela garantit une CI fiable et un comportement correct de l’API.
+
+---
+
+## Auteur
+
+Selma — Ingénieure en Intelligence Artificielle  
 
 Projet réalisé dans le cadre de la formation OpenClassrooms
-
