@@ -2,6 +2,7 @@ from unittest.mock import patch
 from fastapi.testclient import TestClient
 
 
+# Fake model pour simuler le comportement du modèle
 class FakeModel:
     def predict(self, X):
         return [0]
@@ -10,6 +11,7 @@ class FakeModel:
         return [[0.7, 0.3]]
 
 
+# Patch du loader pour éviter de charger un vrai modèle
 with patch("credit_scoring_project.api.model_loader.load_model") as mock_model:
     mock_model.return_value = {
         "model": FakeModel(),
@@ -24,13 +26,14 @@ with patch("credit_scoring_project.api.model_loader.load_model") as mock_model:
 client = TestClient(app)
 
 
-# ✅ Test route home
+#  Test route home
 def test_home():
     response = client.get("/")
     assert response.status_code == 200
+    assert "message" in response.json()
 
 
-# ✅ Test prédiction (tolérant pour CI)
+#  Test prédiction valide (STRICT)
 def test_predict_valid():
     data = {
         "AMT_INCOME_TOTAL": 50000,
@@ -40,23 +43,32 @@ def test_predict_valid():
 
     response = client.post("/predict", json=data)
 
-    # On accepte le comportement réel de l’API
-    assert response.status_code in [200, 400]
+    assert response.status_code == 200
+
+    result = response.json()
+    assert "prediction" in result
+    assert "probability" in result
+    assert isinstance(result["prediction"], int)
+    assert isinstance(result["probability"], float)
 
 
-# ✅ Type invalide
+#  Type invalide
 def test_predict_invalid_type():
-    response = client.post("/predict", json={"AMT_INCOME_TOTAL": "invalid"})
+    response = client.post("/predict", json={
+        "AMT_INCOME_TOTAL": "invalid"
+    })
+
     assert response.status_code == 400
 
 
-# ✅ Champs manquants
+#  Champs manquants
 def test_predict_missing_fields():
     response = client.post("/predict", json={})
+
     assert response.status_code == 400
 
 
-# ✅ Cas extrême (tolérant)
+
 def test_predict_edge_case():
     data = {
         "AMT_INCOME_TOTAL": 0,
@@ -66,4 +78,8 @@ def test_predict_edge_case():
 
     response = client.post("/predict", json=data)
 
-    assert response.status_code in [200, 400]
+    assert response.status_code == 200
+
+    result = response.json()
+    assert "prediction" in result
+    assert "probability" in result
